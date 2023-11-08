@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Exam_3</title>
+  <link rel="stylesheet" href="./CSS/Normalize.css">
+  <link rel="stylesheet" href="./CSS/style.css">
 </head>
 <body>
   <main>
@@ -12,9 +13,8 @@
       <form action="">
         <div class="card"> 
           <div class="card-body">
-            <h1>Introduce la cantidad de filas:</h1>
-            <p><small>Maximo 50 filas, minimo 1</small></p>
-            <input name="quantity" type="number">
+            <h1>Enter the number of rows:</h1>
+            <input name="quantity" type="number" min="1" max="50">
           </div>
           <div class="card-footer">
             <button>Enviar</button>
@@ -26,6 +26,6 @@
     </section>
     <section id="response"></section>
   </main>
-  <script src="app.js"></script>
+  <script src="./JS/app.js"></script>
 </body>
 </html>
