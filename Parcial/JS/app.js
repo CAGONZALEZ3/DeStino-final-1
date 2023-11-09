@@ -1,9 +1,13 @@
+
 var piramide = [];
+let idealPath = [];
+let quantity;
+
 // HTML Elements
 const form = document.querySelector('form');
 const response = document.querySelector('#response');
 const camino = document.querySelector('#camino');
-// ----------------------------------------
+const reset = document.querySelector('#reset-btn');
 
 // Functions
 const createCards = (quantity) => {
@@ -44,6 +48,7 @@ const encontrarMejorCamino1 = (matriz) => {
   }
   return matriz[0][0];
 }
+
 const encontrarMejorCamino = (matriz) => {
   const n = matriz.length;
   const dp = new Array(n).fill(0).map(() => new Array(n).fill(0));
@@ -78,15 +83,15 @@ const encontrarMejorCamino = (matriz) => {
   return { bestPathSum: dp[0][0], camino: mejorCamino };
 }
 
-const createBestWay =(way) =>{
+const createBestWay = (way) =>{
   let cards='';
   cards += `<div class="row">`;
   console.log(way,"bestway");
   for (let i = 0; i < way.length; i++) {
-    
     cards += `
           <div class="square">${way[i]}</div>
         `;
+    idealPath[i] = way[i];
   }
   cards += `</div>`;
   return cards;
@@ -96,22 +101,43 @@ const drawBestWay = (cards) =>{
   camino.innerHTML = cards;
 }
 
-// ----------------------------------------
+const colorWay = (idealPath) => {
+  const rows = document.querySelectorAll('.row');
+  for (let i = 0; i < idealPath.length; i++) {
+    for (let j = 0; j < rows.item(i+1).childElementCount; j++) {
+      if( idealPath[i] == parseInt(rows.item(i+1).children.item(j).innerText) )
+        rows.item(i+1).children.item(j).classList.replace("square", "square-color-way");
+    }
+  }
+}
 
 // Event Handlers
+
 const onFormSubmit = (event) => {
   event.preventDefault();
   const formData = new FormData(event.currentTarget);
-  const cards = createCards(parseInt(formData.get('quantity')));
+  quantity = formData.get('quantity');
+  const cards = createCards(parseInt(quantity));
+  reset.style.display = 'block';
   drawCards(cards);
   const {bestPathSum, camino } = encontrarMejorCamino(piramide);
   const ways = createBestWay(camino);
   drawBestWay(ways);
-  document.getElementById("sumas").innerHTML = "Sumas: " + bestPathSum;
-  
+  colorWay(idealPath);
+  document.getElementById("sumas").innerHTML = "Sumas: " + bestPathSum; 
 }
 
-// ----------------------------------------
+const resetPyramid = (e) => {
+  e.preventDefault();
+  const cards = createCards(parseInt(quantity));
+  drawCards(cards);
+  const {bestPathSum, camino } = encontrarMejorCamino(piramide);
+  const ways = createBestWay(camino);
+  drawBestWay(ways);
+  colorWay(idealPath);
+  document.getElementById("sumas").innerHTML = "Sumas: " + bestPathSum; 
+}
 
 // Event Listeners
 form.addEventListener('submit', onFormSubmit);
+reset.addEventListener('click', resetPyramid);
