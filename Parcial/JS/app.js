@@ -40,21 +40,13 @@ const drawCards = (cards) => {
   response.innerHTML = cards;
 }
 
-const encontrarMejorCamino1 = (matriz) => {
-  for (let i = matriz.length - 2; i >= 0; i--) {
-    for (let j = 0; j < matriz[i].length; j++) {
-      matriz[i][j] += Math.max(matriz[i + 1][j], matriz[i + 1][j + 1]);
-    }
-  }
-  return matriz[0][0];
-}
 
 const encontrarMejorCamino = (matriz) => {
   const n = matriz.length;
   const dp = new Array(n).fill(0).map(() => new Array(n).fill(0));
   let mejorCamino = [];
   let fila = 0;
-  let indice = 0;
+  let xedin = 0;
 
   for (let i = 0; i < n; i++) {
     dp[n - 1][i] = matriz[n - 1][i];
@@ -69,16 +61,16 @@ const encontrarMejorCamino = (matriz) => {
   
 
   while (fila < n - 1) {
-    mejorCamino.push(matriz[fila][indice]);
-    if (dp[fila + 1][indice] > dp[fila + 1][indice + 1]) {
-      indice = indice; 
+    mejorCamino.push(matriz[fila][xedin]);
+    if (dp[fila + 1][xedin] > dp[fila + 1][xedin + 1]) {
+      xedin = xedin; 
     } else {
-      indice = indice + 1; 
+      xedin = xedin + 1; 
     }
     fila = fila + 1;
   }
 
-  mejorCamino.push(matriz[n - 1][indice]); 
+  mejorCamino.push(matriz[n - 1][xedin]); 
 
   return { bestPathSum: dp[0][0], camino: mejorCamino };
 }
