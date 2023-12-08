@@ -123,6 +123,24 @@ const onSubmitForm = (e) => {
     const bestPath = drawBestPath(bestPathValues);
     paintCanvasBestPath(bestPathSumValue,bestPath);
     paintBestPathPyramid(bestPathValues);
+
+    const temp = document.querySelector('#right-side-bottom');
+    const pyramidGenerated = temp.innerHTML;
+    const url = 'http://localhost:4567/pyramids';
+                 
+    // fetch post
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ pyramid: pyramidGenerated })
+    })
+      .then(response => response.json() )
+      .then(data => {
+        console.log('Success:', data);
+      });
+
 }
 
 const resetPyramid = (e) => {
