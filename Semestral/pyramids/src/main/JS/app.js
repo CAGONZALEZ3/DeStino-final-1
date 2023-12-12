@@ -4,8 +4,9 @@ let height;
 
 //HTML elements
 const form = document.querySelector('form');
-const btn_rst = document.querySelector('#right-side-top');
-const canvasPyramid = document.querySelector('#right-side-bottom');
+const btn_history = document.querySelector('#right-side-top-right'); // new
+const btn_rst = document.querySelector('#right-side-top-left');
+const canvasPyramid = document.querySelector('#content');
 const canvasBestPath = document.querySelector('#ideal-path');
 
 // Functions
@@ -48,7 +49,8 @@ const drawPyramid = (height, pyramidValues) => {
 }
 
 const paintCanvasPyramid = (pyramid) => {
-    btn_rst.innerHTML = ' <button id="reset-btn">&#x21bb;</button> ';
+    btn_history.innerHTML = '<button> <a href="pyramids-history.html" target="_blank"> <h1>Ver Historial de Piramides</h1> </a> </button>';    
+    btn_rst.innerHTML = '<button id="reset-btn">  <h1>&#x27F3;</h1> </button> ';
     canvasPyramid.innerHTML = pyramid;
 }
 
@@ -87,17 +89,16 @@ const findBestPath = (pyramidValues) => {
 }
 
 const drawBestPath = (bestPathValues) => {
-  let bestPath = '<div class="row-ideal-path">';
+  let bestPath = '<div id="gran-total-path" class="row-ideal-path">';
   for (let i = 0; i < bestPathValues.length; i++) {
     bestPath += ` <div class="square"> ${bestPathValues[i]} </div> `;
   }
   bestPath += `</div>`;
-  console.log(bestPath);
   return bestPath;
 }
 
 const paintCanvasBestPath = (bestPathSumValue, bestPath) => {
-  canvasBestPath.innerHTML = ` <div class="row-ideal-path"> <h1>Sumatoria: ${bestPathSumValue}</h1> </div> `;
+  canvasBestPath.innerHTML = ` <div id="gran-total" class="row-ideal-path"> <h1>Sumatoria: ${bestPathSumValue}</h1> </div> `;
   canvasBestPath.innerHTML += bestPath;
 }
 
@@ -124,23 +125,44 @@ const onSubmitForm = (e) => {
     paintCanvasBestPath(bestPathSumValue,bestPath);
     paintBestPathPyramid(bestPathValues);
 
-    const temp = document.querySelector('#right-side-bottom');
-    const pyramidGenerated = temp.innerHTML;
+    const temp1 = document.querySelector('#content');
+    const temp2 = document.querySelector('#gran-total');
+    const temp3 = document.querySelector('#gran-total-path');
+
+    const pyramidGenerated = temp1.innerHTML;
+    const pyramidGrantTotal = temp2.innerHTML;
+    const pyramidBestPath = temp3.innerHTML;
+
     const url = 'http://localhost:4567/pyramids';
-                 
-    // fetch post
+
     fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json' // Specify content type as JSON
       },
-      body: JSON.stringify({ pyramid: pyramidGenerated })
+      body: JSON.stringify({
+        pyramid: pyramidGenerated,
+        total: pyramidGrantTotal,
+        path: pyramidBestPath
+      }) // Convert data to JSON format
     })
-      .then(response => response.json() )
-      .then(data => {
-        console.log('Success:', data);
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parse the response body as JSON
+      })
+      .then(data => { // Work with the retrieved data
+        console.log(data);
+      })
+      .catch(error => { // Handle any errors that occurred during the fetch
+        console.error('Fetch error:', error);
       });
 
+}
+
+const showPyramids = (e) =>{
+  e.preventDefault();
 }
 
 const resetPyramid = (e) => {
