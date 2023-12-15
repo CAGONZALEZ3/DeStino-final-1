@@ -10,20 +10,16 @@ class Pyramids {
     public ArrayList <String> pyramidsTotal = new ArrayList<String>();
     public ArrayList <String> pyramidsPath = new ArrayList<String>();
 
-    public void add(String e, int number){
-        switch (number) {
-            case 1:
-                pyramids.add(e);
-                break;
-            case 2:
-                pyramidsTotal.add(e);
-                break;
-            case 3:
-                pyramidsPath.add(e);
-                break;        
-            default:
-                break;
-        }
+    public void addPyramids (String e){
+        pyramids.add(e);
+    }
+
+    public void addPyramidsTotal (String e){
+        pyramidsTotal.add(e);
+    }
+    
+    public void addPyramidsPath (String e){
+        pyramidsPath.add(e);
     }
 
     public JSONObject get(int id) {
@@ -65,9 +61,9 @@ public final class App {
             String pyramid = jItem.getString("pyramid");
             String total = jItem.getString("total");
             String path = jItem.getString("path");
-            pyramids.add(pyramid, 1);
-            pyramids.add(total, 2);
-            pyramids.add(path, 3);
+            pyramids.addPyramids(pyramid);
+            pyramids.addPyramidsTotal(total);
+            pyramids.addPyramidsPath(path);
 
             //JSONObject jObject = new JSONObject();
             //jObject.put("pyramids", pyramids.all() );

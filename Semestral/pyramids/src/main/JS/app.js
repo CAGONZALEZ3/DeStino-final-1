@@ -112,6 +112,44 @@ const paintBestPathPyramid = (bestPathValues) => {
   }
 }
 
+const savedPyramid =  () => {
+
+  const temp1 = document.querySelector('#content');
+  const temp2 = document.querySelector('#gran-total');
+  const temp3 = document.querySelector('#gran-total-path');
+
+  const pyramidGenerated = temp1.innerHTML;
+  const pyramidGrantTotal = temp2.innerHTML;
+  const pyramidBestPath = temp3.innerHTML;
+
+  const url = 'http://localhost:4567/pyramids';
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json' // Specify content type as JSON
+    },
+    body: JSON.stringify({
+      pyramid: pyramidGenerated,
+      total: pyramidGrantTotal,
+      path: pyramidBestPath
+    }) // Convert data to JSON format
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json(); // Parse the response body as JSON
+    })
+    .then(data => { // Work with the retrieved data
+      console.log(data);
+    })
+    .catch(error => { // Handle any errors that occurred during the fetch
+      console.error('Fetch error:', error);
+    });
+
+}
+
 // Event handlers
 const onSubmitForm = (e) => {
     e.preventDefault();
@@ -124,45 +162,7 @@ const onSubmitForm = (e) => {
     const bestPath = drawBestPath(bestPathValues);
     paintCanvasBestPath(bestPathSumValue,bestPath);
     paintBestPathPyramid(bestPathValues);
-
-    const temp1 = document.querySelector('#content');
-    const temp2 = document.querySelector('#gran-total');
-    const temp3 = document.querySelector('#gran-total-path');
-
-    const pyramidGenerated = temp1.innerHTML;
-    const pyramidGrantTotal = temp2.innerHTML;
-    const pyramidBestPath = temp3.innerHTML;
-
-    const url = 'http://localhost:4567/pyramids';
-
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json' // Specify content type as JSON
-      },
-      body: JSON.stringify({
-        pyramid: pyramidGenerated,
-        total: pyramidGrantTotal,
-        path: pyramidBestPath
-      }) // Convert data to JSON format
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json(); // Parse the response body as JSON
-      })
-      .then(data => { // Work with the retrieved data
-        console.log(data);
-      })
-      .catch(error => { // Handle any errors that occurred during the fetch
-        console.error('Fetch error:', error);
-      });
-
-}
-
-const showPyramids = (e) =>{
-  e.preventDefault();
+    savedPyramid();
 }
 
 const resetPyramid = (e) => {
@@ -174,6 +174,7 @@ const resetPyramid = (e) => {
   const bestPath = drawBestPath(bestPathValues);
   paintCanvasBestPath(bestPathSumValue,bestPath);
   paintBestPathPyramid(bestPathValues);
+  savedPyramid();
 }
 
 // Event listeners
